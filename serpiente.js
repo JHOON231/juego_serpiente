@@ -15,11 +15,19 @@
 
     function limpiarCanvas() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+
     }
 
     function dibujarTodo() {
       limpiarCanvas();
+      dibujarTablero();
     }
 
-
+    function dibujarTablero(){
+    ctx.strokeStyle = "white";
+    ctx.beginPath();
+    ctx.moveTo(50, 50);
+    ctx.lineTo(200, 200);
+    ctx.stroke();
+    }
 
