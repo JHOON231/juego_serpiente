@@ -19,6 +19,7 @@
       y: 0
     };
     let puntaje = 0;
+    let velocidad = 300;
 
 
     
@@ -37,6 +38,11 @@
 
     generarComida();
     dibujarTodo();
+
+    if (gameOver()) {
+      clearInterval(intervaloSerpiente);
+      document.getElementById("mensaje").textContent = "GAME OVER";
+    }
 
     function dibujarTodo() {
       limpiarCanvas();
@@ -99,6 +105,18 @@
     }
     
     function cambiarDireccion(direccion) {
+      if (direccionActual == "derecha" && direccion == "izquierda") {
+        return;
+      }
+      if (direccionActual == "izquierda" && direccion == "derecha") {
+        return;
+      }
+      if (direccionActual == "arriba" && direccion == "abajo") {
+        return;
+      }
+      if (direccionActual == "abajo" && direccion == "arriba") {
+        return;
+      }
       direccionActual = direccion;
     }
 
@@ -156,11 +174,15 @@
         document.getElementById("puntaje").textContent = puntaje;
         generarComida();
       }
+      if (gameOver()) {
+        clearInterval(intervaloSerpiente);
+        document.getElementById("mensaje").textContent = "💀 GAME OVER";
+      }
       dibujarTodo();
     }
 
     function iniciarJuego(){
-      intervaloSerpiente = setInterval(moverSerpiente, 1000);
+      intervaloSerpiente = setInterval(moverSerpiente, velocidad);
     }
 
     function pausarJuego(){
@@ -186,5 +208,40 @@
         return true;
       }
       return false;
+    }
+
+    function gameOver() {
+          const cabeza = serpiente[0];
+          if (cabeza.x < 0) {
+            return true;
+          }
+          if (cabeza.x >= canvas.width / TAMANIO_CELDA) {
+            return true;
+          }
+          if (cabeza.y < 0) {
+            return true;
+          }
+          if (cabeza.y >= canvas.height / TAMANIO_CELDA) {
+            return true;
+          }
+          return false;
+        }
+        function reiniciarJuego() {
+      clearInterval(intervaloSerpiente);
+      serpiente.length = 0;
+      serpiente.push(
+        { x: 4, y: 5 },
+        { x: 5, y: 5 },
+        { x: 6, y: 5 },
+        { x: 7, y: 5 },
+        { x: 7, y: 6 }
+      );
+      direccionActual = "derecha";
+      puntaje = 0;
+      document.getElementById("puntaje").textContent = puntaje;
+      document.getElementById("mensaje").textContent =
+        "Presiona iniciar para comenzar.";
+      generarComida();
+      dibujarTodo();
     }
 
